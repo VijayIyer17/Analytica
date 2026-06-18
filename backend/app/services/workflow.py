@@ -5,6 +5,7 @@ from app.services.agents.planner import planner_node
 from app.services.agents.coder import coder_node
 from app.services.agents.executor import executor_node
 from app.services.agents.reviewer import reviewer_node
+from app.services.agents.synthesizer import synthesizer_node
 
 MAX_RETRIES = 3
 
@@ -17,7 +18,7 @@ def route_execution(state: WorkflowState):
     
     if not execution_error:
         # Success!
-        return END
+        return "synthesizer"
     
     if retry_count >= MAX_RETRIES:
         # Too many retries, stop to avoid infinite loops
@@ -38,6 +39,7 @@ def build_workflow():
     workflow.add_node("coder", coder_node)
     workflow.add_node("executor", executor_node)
     workflow.add_node("reviewer", reviewer_node)
+    workflow.add_node("synthesizer", synthesizer_node)
     
     # Add edges
     workflow.set_entry_point("analyst")
@@ -50,13 +52,17 @@ def build_workflow():
         "executor",
         route_execution,
         {
-            END: END,
-            "reviewer": "reviewer"
+            "synthesizer": "synthesizer",
+            "reviewer": "reviewer",
+            END: END
         }
     )
     
     # Loop back to coder after reviewer feedback
     workflow.add_edge("reviewer", "coder")
+    
+    # End at Synthesizer
+    workflow.add_edge("synthesizer", END)
     
     # Compile the graph
     return workflow.compile()
