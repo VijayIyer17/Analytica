@@ -6,3 +6,7 @@ pandas
 openpyxl
 pydantic
 pydantic-settings
+langchain
+langchain-core
+langgraph
+langchain-google-genai
