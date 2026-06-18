@@ -4,9 +4,9 @@ import uuid
 import pandas as pd
 from app.models.data_schema import DatasetSchema, ColumnSchema
 
-# In-memory DuckDB connection (or can be persistent)
-# Using a global connection for the in-memory instance
-conn = duckdb.connect(database=':memory:')
+# Use a persistent DuckDB file so the Docker sandbox can mount and read it
+DB_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'data.duckdb'))
+conn = duckdb.connect(database=DB_PATH)
 
 def load_file_to_duckdb(file_path: str, file_name: str) -> str:
     """

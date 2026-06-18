@@ -12,3 +12,5 @@ class WorkflowState(BaseModel):
     generated_code: Optional[str] = None
     execution_error: Optional[str] = None
     final_output: Optional[str] = None
+    reviewer_feedback: Optional[str] = None
+    retry_count: int = 0

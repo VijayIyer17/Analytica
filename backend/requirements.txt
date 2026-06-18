@@ -11,3 +11,4 @@ langchain-core
 langgraph
 langchain-google-genai
 python-dotenv
+docker
